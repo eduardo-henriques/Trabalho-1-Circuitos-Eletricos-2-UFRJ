@@ -15,32 +15,33 @@ def get_elements(lines):
 
     for line in lines:
         line=line.split(' ')
-        element = {'id':line[0],'nodeA':int(line[1]),'nodeB':int(line[2]),'value':line[3]}
-        if line[0][0] == "I":
-            element['type']= line[3]
-            if element['type'] == 'sin' or element['type']== 'SIN':
+        if line[0]!= '*':
+            element = {'id':line[0],'nodeA':int(line[1]),'nodeB':int(line[2]),'value':line[3]}
+            if line[0][0] == "I":
+                element['type']= line[3]
+                if element['type'] == 'sin' or element['type']== 'SIN':
+                    del element['value']
+                    element['amp'] = float(line[4])
+                    element['freq'] = float(line[5])
+                    element['phase']= float(line[6])
+                else:
+                    element['value'] = float(line[4])
+                
+            elif line[0][0] == "G":
+                element['nodeC'] = int(line[3])
+                element['nodeD'] = int(line[4])
+                element['value'] = float(line[5])
+            elif line[0][0] == "K":
                 del element['value']
-                element['amp'] = float(line[4])
-                element['freq'] = float(line[5])
-                element['phase']= float(line[6])
+                element['L1'] = float(line[3])
+                element['nodeC'] = int(line[4])
+                element['nodeD'] = int(line[5])
+                element['L2'] = float(line[6])
+                element['M'] = float(line[7])
             else:
-                element['value'] = float(line[4])
-            
-        elif line[0][0] == "G":
-            element['nodeC'] = int(line[3])
-            element['nodeD'] = int(line[4])
-            element['value'] = float(line[5])
-        elif line[0][0] == "K":
-            del element['value']
-            element['L1'] = float(line[3])
-            element['nodeC'] = int(line[4])
-            element['nodeD'] = int(line[5])
-            element['L2'] = float(line[6])
-            element['M'] = float(line[7])
-        else:
-            element['value'] = float(element['value'])
+                element['value'] = float(element['value'])
 
-        elements.append(element)
+            elements.append(element)
 
     return elements
 
